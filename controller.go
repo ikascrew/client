@@ -2,22 +2,36 @@ package client
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 	"strings"
 
-	"github.com/golang/glog"
 	"github.com/ikascrew/xbox"
 )
 
 var Y bool  //Server push
-var X bool  //Server push
+var X bool  //Cursor display
 var A bool  //next Add
 var B bool  //next Delete
 var L1 bool //Server switch
 var R1 bool //Server switch
 
+func clearControllerEvent(ev *xbox.Event) {
+	ev.Axes[xbox.CROSS_HORIZONTAL] = 0
+	ev.Axes[xbox.CROSS_VERTICAL] = 0
+	ev.Buttons[xbox.L1] = false
+	ev.Buttons[xbox.R1] = false
+	ev.Buttons[xbox.A] = false
+	ev.Buttons[xbox.B] = false
+	ev.Buttons[xbox.X] = false
+	ev.Buttons[xbox.Y] = false
+	ev.Buttons[xbox.START] = false
+	ev.Buttons[xbox.BACK] = false
+}
+
 func (ika *IkascrewClient) controller(e xbox.Event) error {
 
+	log.Println("controller")
 	if xbox.JudgeAxis(e, xbox.CROSS_VERTICAL) {
 		ika.selector.list.setCursor(e.Axes[xbox.CROSS_VERTICAL] / 2)
 		ika.selector.list.Push()
@@ -34,7 +48,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 			L1 = false
 			err := ika.callPrev()
 			if err != nil {
-				glog.Error("callPrev[" + err.Error() + "]")
+				log.Printf("callPrev[" + err.Error() + "]")
 			}
 		*/
 	} else if !e.Buttons[xbox.L1] {
@@ -47,7 +61,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 			R1 = false
 			err := ika.callNext()
 			if err != nil {
-				glog.Error("callNext[" + err.Error() + "]")
+				log.Printf("callNext[" + err.Error() + "]")
 			}
 		*/
 	} else if !e.Buttons[xbox.R1] {
@@ -81,7 +95,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 
 			err = ika.callEffect(int64(id), t)
 			if err != nil {
-				glog.Error("callEffect[" + err.Error() + "]")
+				log.Printf("callEffect[" + err.Error() + "]")
 			} else {
 
 				//0
@@ -91,7 +105,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 				ika.selector.next.Push()
 			}
 		} else {
-			glog.Error("Pusher Error: No Index")
+			log.Printf("Pusher Error: No Index")
 		}
 	} else if !e.Buttons[xbox.Y] {
 		Y = true
@@ -107,7 +121,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 			ika.selector.player.Push()
 
 		} else {
-			glog.Error("Pusher Error: No Index")
+			log.Printf("Pusher Error: No Index")
 		}
 
 	} else if !e.Buttons[xbox.X] {
@@ -125,7 +139,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 			}
 			ika.selector.next.Push()
 		} else {
-			glog.Error("Selector Error:" + "No Index")
+			log.Printf("Selector Error:" + "No Index")
 		}
 
 	} else if !e.Buttons[xbox.B] {
@@ -137,7 +151,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 		err := ika.selector.next.delete()
 		if err != nil {
 			// TODO 無視
-			glog.Error("Pusher Delete Error:", err)
+			log.Printf("Pusher Delete Error:", err)
 		}
 		ika.selector.next.Push()
 	} else if !e.Buttons[xbox.A] {

@@ -10,6 +10,7 @@ require (
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/ikascrew/core v0.0.0-20200712005459-75f6c147a025
 	github.com/ikascrew/go-opencv v0.0.0-20171108105817-beed5ac470ba // indirect
+	github.com/ikascrew/ikasbox v0.0.0-20200712003025-49f1509df2bf
 	github.com/ikascrew/ikascrew v0.0.0-20170821023227-0c3f5d5cfc00
 	github.com/ikascrew/pb v0.0.0-20200229215417-95f0a80962e7
 	github.com/ikascrew/powermate v0.0.0-20170724041315-7b09f8e1cf88
@@ -17,6 +18,8 @@ require (
 	github.com/ikascrew/xbox v0.0.0-20191228051708-da808c0d61a2
 	github.com/mattn/go-colorable v0.1.7 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
+	github.com/nsf/termbox-go v0.0.0-20190817171036-93860e161317
 	github.com/simulatedsimian/joystick v1.0.1 // indirect
 	gocv.io/x/gocv v0.23.0
 	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
@@ -26,8 +29,9 @@ require (
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381
 	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
 	golang.org/x/text v0.3.3 // indirect
+	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
 	google.golang.org/genproto v0.0.0-20200711021454-869866162049 // indirect
 	google.golang.org/grpc v1.30.0
 	google.golang.org/protobuf v1.25.0 // indirect
-	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
+	gopkg.in/cheggaaa/pb.v1 v1.0.28
 )

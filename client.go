@@ -5,10 +5,11 @@ import (
 	"os"
 
 	"github.com/ikascrew/pb"
-
 	pm "github.com/ikascrew/powermate"
 	vol "github.com/ikascrew/volumes"
 	"github.com/ikascrew/xbox"
+
+	tm "github.com/nsf/termbox-go"
 )
 
 var vols *vol.Volumes
@@ -59,16 +60,15 @@ func Start() error {
 		}
 	*/
 
-	//TODO
-
 	//XBOX Controller
 	xbox.HandleFunc(ika.controller)
 	go func() {
 		err = xbox.Listen(0)
 		if err != nil {
-			log.Printf("Xbox Listen Error[" + err.Error() + "]")
+			log.Printf("Controller Listen Error[" + err.Error() + "]")
 			return
 		}
+		log.Printf("Success Controller")
 	}()
 
 	//powermate
@@ -78,6 +78,16 @@ func Start() error {
 			log.Printf("powermate Listen Error[" + err.Error() + "]")
 			return
 		}
+		log.Printf("Success powermate")
+	}()
+
+	go func() {
+		err = virtualController(ika.controller)
+		if err != nil {
+			log.Printf("virtual Controller Listen Error[" + err.Error() + "]")
+			return
+		}
+		log.Printf("Success Keyboard")
 	}()
 
 	//Main
@@ -102,14 +112,102 @@ func Start() error {
 	return err
 }
 
+func virtualController(fn func(xbox.Event) error) error {
+
+	log.Println("virtualController")
+	//termboxの初期化
+	err := tm.Init()
+	if err != nil {
+		return err
+	}
+	//プログラム終了時termboxを閉じる
+	defer tm.Close()
+
+	xev := xbox.Event{}
+	xev.Buttons = make([]bool, 8)
+	xev.Axes = make([]int, 2)
+
+	for {
+		pev := pm.Event{}
+		pev.Type = pm.None
+
+		flag := false
+		clearControllerEvent(&xev)
+
+		switch e := tm.PollEvent(); e.Type {
+		case tm.EventKey:
+			switch e.Key {
+			//case tm.KeyEnter:
+			case tm.KeyArrowDown:
+				pev.Type = pm.Type(pm.Press)
+				pev.Value = pm.Value(pm.Down)
+			case tm.KeyArrowUp:
+				pev.Type = pm.Type(pm.Press)
+				pev.Value = pm.Value(pm.Up)
+			case tm.KeyArrowRight:
+				pev.Type = pm.Type(pm.Rotation)
+				pev.Value = pm.Value(pm.Right)
+			case tm.KeyArrowLeft:
+				pev.Type = pm.Type(pm.Rotation)
+				pev.Value = pm.Value(pm.Left)
+			case tm.KeyCtrlJ:
+				flag = true
+				xev.Axes[xbox.CROSS_HORIZONTAL] = -20000
+			case tm.KeyCtrlK:
+				flag = true
+				xev.Axes[xbox.CROSS_HORIZONTAL] = 20000
+			case tm.KeyCtrlH:
+				flag = true
+				xev.Axes[xbox.CROSS_VERTICAL] = -20000
+			case tm.KeyCtrlL:
+				flag = true
+				xev.Axes[xbox.CROSS_VERTICAL] = 20000
+			case tm.KeyCtrlQ:
+				flag = true
+				xev.Buttons[xbox.Y] = true
+			case tm.KeyCtrlW:
+				flag = true
+				xev.Buttons[xbox.X] = true
+			case tm.KeyCtrlA:
+				flag = true
+				xev.Buttons[xbox.B] = true
+			case tm.KeyCtrlS:
+				flag = true
+				xev.Buttons[xbox.A] = true
+			default:
+			}
+
+			if pev.Type != pm.None {
+				err = trigger(pev)
+				if err != nil {
+					log.Println(err)
+				}
+			}
+
+			if flag {
+				err = fn(xev)
+				if err != nil {
+					log.Println(err)
+				}
+			}
+
+		default:
+		}
+	}
+
+	return nil
+}
+
 func trigger(e pm.Event) error {
 
+	log.Println("trigger")
 	val := vols.Get()
 	if zero {
 		val = 0
 		vols.SetCursor(0)
 		zero = false
 	}
+
 	idx := vols.GetCursor()
 	update := false
 
