@@ -8,8 +8,7 @@ import (
 
 	"golang.org/x/exp/shiny/screen"
 
-	//"github.com/ikascrew/core/util"
-	"github.com/ikascrew/core/tool"
+	"github.com/ikascrew/client/tool"
 )
 
 type Next struct {

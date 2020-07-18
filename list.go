@@ -9,8 +9,7 @@ import (
 
 	"golang.org/x/exp/shiny/screen"
 
-	"github.com/ikascrew/core/tool"
-	//"github.com/ikascrew/core/util"
+	"github.com/ikascrew/client/tool"
 )
 
 var max = 0

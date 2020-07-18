@@ -4,12 +4,14 @@ import (
 	"log"
 	"os"
 
+	mc "github.com/ikascrew/core/multicast"
 	"github.com/ikascrew/pb"
 	pm "github.com/ikascrew/powermate"
 	vol "github.com/ikascrew/volumes"
 	"github.com/ikascrew/xbox"
 
 	tm "github.com/nsf/termbox-go"
+	"golang.org/x/xerrors"
 )
 
 var vols *vol.Volumes
@@ -30,39 +32,30 @@ var ika *IkascrewClient
 
 func Start() error {
 
-	var err error
-	//var rep *pb.SyncReply
-
-	go vols.Start()
-	pm.HandleFunc(trigger)
+	args := os.Args
 
 	ika = &IkascrewClient{}
-
-	args := os.Args
 	if len(args) > 2 {
 		ika.testMode = true
 	} else {
 		ika.testMode = false
 	}
-	/*
-		if ika.testMode {
-			pid, _ := strconv.Atoi(args[2])
-			rep := &pb.SyncReply{
-				Source:  0,
-				Type:    "",
-				Project: int64(pid),
-			}
-		} else {
-			rep, err = ika.syncServer()
-			if err != nil {
-				return err
-			}
-		}
-	*/
 
-	//XBOX Controller
-	xbox.HandleFunc(ika.controller)
+	var err error
+
+	cli, err := mc.NewClient()
+	if err != nil {
+		return xerrors.Errorf("udp client: %w", err)
+	}
+
+	acs, err := cli.Find()
+	for _, elm := range acs {
+		log.Println(elm)
+	}
+
 	go func() {
+		//XBOX Controller
+		xbox.HandleFunc(ika.controller)
 		err = xbox.Listen(0)
 		if err != nil {
 			log.Printf("Controller Listen Error[" + err.Error() + "]")
@@ -71,8 +64,10 @@ func Start() error {
 		log.Printf("Success Controller")
 	}()
 
+	go vols.Start()
 	//powermate
 	go func() {
+		pm.HandleFunc(trigger)
 		err = pm.Listen("/dev/input/powermate")
 		if err != nil {
 			log.Printf("powermate Listen Error[" + err.Error() + "]")
@@ -114,7 +109,6 @@ func Start() error {
 
 func virtualController(fn func(xbox.Event) error) error {
 
-	log.Println("virtualController")
 	//termboxの初期化
 	err := tm.Init()
 	if err != nil {

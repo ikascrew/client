@@ -8,7 +8,7 @@ require (
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200707082815-5321531c36a2 // indirect
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/ikascrew/core v0.0.0-20200712005459-75f6c147a025
+	github.com/ikascrew/core v0.0.0-20200716052809-d71df6c3b3f2
 	github.com/ikascrew/go-opencv v0.0.0-20171108105817-beed5ac470ba // indirect
 	github.com/ikascrew/ikasbox v0.0.0-20200712003025-49f1509df2bf
 	github.com/ikascrew/ikascrew v0.0.0-20170821023227-0c3f5d5cfc00

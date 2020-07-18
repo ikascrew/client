@@ -10,6 +10,7 @@ github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d/go.mod h1:3eOhrU
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
 github.com/cncf/udpa/go v0.0.0-20191209042840-269d4d468f6f/go.mod h1:M8M6+tZqaGXZJjfX53e64911xZQV5JYwmTeXPW+k8Sc=
+github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
@@ -44,6 +45,8 @@ github.com/ikascrew/core v0.0.0-20200711005828-838e85f7a2c4 h1:hmfqQydPc0yVEeDUi
 github.com/ikascrew/core v0.0.0-20200711005828-838e85f7a2c4/go.mod h1:mWtd8UIOuMMGcQ+QSObW7eVOTPDs4CJ0RkMs7zv88pI=
 github.com/ikascrew/core v0.0.0-20200712005459-75f6c147a025 h1:H5ZqeK4HxPWZ0X30FtVM4AR1/hk6MmkN8D/h7TeuHnY=
 github.com/ikascrew/core v0.0.0-20200712005459-75f6c147a025/go.mod h1:mWtd8UIOuMMGcQ+QSObW7eVOTPDs4CJ0RkMs7zv88pI=
+github.com/ikascrew/core v0.0.0-20200716052809-d71df6c3b3f2 h1:QLmO2Kn/GARE+E5NEnNXrN6QpYGeoxI+LEPn1yN61JI=
+github.com/ikascrew/core v0.0.0-20200716052809-d71df6c3b3f2/go.mod h1:3Dr01/iht9L+8kqG6lj5vi7hvcJvr6RtKQimyvPAP6c=
 github.com/ikascrew/go-opencv v0.0.0-20171108105817-beed5ac470ba h1:lp76h6QIMII6lXMgU0/DWzJh6QgADX1nT7YWrMbz11c=
 github.com/ikascrew/go-opencv v0.0.0-20171108105817-beed5ac470ba/go.mod h1:cF4n6oYOEmUbHpACHZ13LkVCyOE30xU48yf80hHmsYc=
 github.com/ikascrew/ikasbox v0.0.0-20200712003025-49f1509df2bf h1:sYritbXL6FDLV5NbNZAEwCHzJcEitJ7vtgScl/GGtuo=
@@ -54,6 +57,7 @@ github.com/ikascrew/pb v0.0.0-20200229215417-95f0a80962e7 h1:w4UsHpJlxMz/6nD0eLD
 github.com/ikascrew/pb v0.0.0-20200229215417-95f0a80962e7/go.mod h1:RpqkzX1jfsXsCrXhXH4pyck6gjD9TVjCrdn1/7BabfY=
 github.com/ikascrew/plugin v0.0.0-20200301081756-926044e825a1/go.mod h1:V97GDF/LxGNbDdsX2tWj9naDYFAXhNocE2RYouUAh8M=
 github.com/ikascrew/plugin v0.0.0-20200302102404-1d05022be573/go.mod h1:SP2jGUecSMTLFiTBTpp6UrT7O4S4fyVt4lYruLirCfU=
+github.com/ikascrew/plugin v0.0.0-20200715234203-87c9c5b19416/go.mod h1:GIiSsp9AcsVlHnRNdxGChApZT7qcembwoxQwHOEZROI=
 github.com/ikascrew/powermate v0.0.0-20170724041315-7b09f8e1cf88 h1:IkkaZJl1pc7nDYmZydaT5pfqN12GEw6Fvo7xTMZBhh8=
 github.com/ikascrew/powermate v0.0.0-20170724041315-7b09f8e1cf88/go.mod h1:U8x+U/5XgLIE4R7F+EsxTw/VlMIwEVvWVBgffnqjcL0=
 github.com/ikascrew/volumes v0.0.0-20191110010825-799f11692e4c h1:bnnvszR81epeu/4XTtMVtCQN7egNW2I6uni70RJ3dvY=
@@ -62,6 +66,7 @@ github.com/ikascrew/xbox v0.0.0-20191228051708-da808c0d61a2 h1:BbaYUhkKxop75fc7H
 github.com/ikascrew/xbox v0.0.0-20191228051708-da808c0d61a2/go.mod h1:iaXCv6vuiHAKvIQCoY/BekxIOu6y7ANkrqEQGeBdyoY=
 github.com/mattn/go-colorable v0.1.4 h1:snbPLB8fVfU9iwbbo30TPtbLRzwWu6aJS6Xh4eaaviA=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
+github.com/mattn/go-colorable v0.1.6/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-colorable v0.1.7 h1:bQGKb3vps/j0E9GfJQ03JyhRuxsvdAanXlT9BTw3mdw=
 github.com/mattn/go-colorable v0.1.7/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-isatty v0.0.8 h1:HLtExJ+uU2HOZ+wI0Tt5DtUDrx8yhUqDcp7fYERX4CE=
@@ -78,10 +83,14 @@ github.com/monochromegane/argen v0.0.0-20150711140148-c37112f9dc50/go.mod h1:gJK
 github.com/monochromegane/goban v0.0.0-20141019070712-284a52313eb5/go.mod h1:iBGyephBWAqf9UJdCwVAB9TZTe6N9VWrHoea+08dg+I=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646/go.mod h1:jpp1/29i3P1S/RLdc7JQKbRpFeM1dOBd8T9ki5s+AY8=
 github.com/nsf/termbox-go v0.0.0-20190817171036-93860e161317/go.mod h1:IuKpRQcYE1Tfu+oAQqaLisqDeXgjyyltCfsaoYN18NQ=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/shirou/gopsutil v2.20.2+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
+github.com/shirou/gopsutil v2.20.6+incompatible/go.mod h1:5b4v6he4MtMOwMlS0TUMTu2PcXUg8+E1lC7eC3UO/RA=
 github.com/simulatedsimian/joystick v1.0.1 h1:bZYHP+qaEmx0oc6oFIYQCt+rYL46G6rZRke+bipEEpY=
 github.com/simulatedsimian/joystick v1.0.1/go.mod h1:V+4pJKB2SmVXfp8w7EW5RR9InUXO5M/WhVEHwosjujA=
+github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 gocv.io/x/gocv v0.22.0 h1:pv+tcjcoW/xsaM/nfrzMK5PEEHYe2ND/LQRoyBpgjsg=
 gocv.io/x/gocv v0.22.0/go.mod h1:7Ju5KbPo+R85evmlhhKPVMwXtgDRNX/PtfVfbToSrLU=
 gocv.io/x/gocv v0.23.0 h1:3Fgbt06/uR8Zf9emWndhjbUjdrw+nto69R/b4noFydY=
@@ -190,7 +199,9 @@ google.golang.org/protobuf v1.24.0 h1:UhZDfRO8JRQru4/+LlLE0BRKGF8L+PICnvYZmx/fEG
 google.golang.org/protobuf v1.24.0/go.mod h1:r/3tXBNzIEhYS9I1OUVjXDlt8tc493IdKGjtUeSXeh4=
 google.golang.org/protobuf v1.25.0 h1:Ejskq+SyPohKW+1uil0JJMtmHCgJPJ/qWTxr8qp+R4c=
 google.golang.org/protobuf v1.25.0/go.mod h1:9JNX74DMeImyA3h4bdi1ymwjUzf21/xIlbajtzgsN7c=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/cheggaaa/pb.v1 v1.0.28 h1:n1tBJnnK2r7g9OW2btFH91V92STTUevLXYFb8gy9EMk=
 gopkg.in/cheggaaa/pb.v1 v1.0.28/go.mod h1:V/YB90LKu/1FcN3WVnfiiE5oMCibMjukxqG/qStrOgw=
+gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190523083050-ea95bdfd59fc/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
