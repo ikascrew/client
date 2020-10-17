@@ -31,7 +31,6 @@ func clearControllerEvent(ev *xbox.Event) {
 
 func (ika *IkascrewClient) controller(e xbox.Event) error {
 
-	log.Println("controller")
 	if xbox.JudgeAxis(e, xbox.CROSS_VERTICAL) {
 		ika.selector.list.setCursor(e.Axes[xbox.CROSS_VERTICAL] / 2)
 		ika.selector.list.Push()
@@ -78,10 +77,6 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 			t := "file"
 			if strings.Index(res, "countdown") >= 0 {
 				t = "countdown"
-			} else if strings.Index(res, "jpg") >= 0 ||
-				strings.Index(res, "jpeg") >= 0 ||
-				strings.Index(res, "png") >= 0 {
-				t = "image"
 			}
 
 			idx := strings.LastIndex(res, "/")

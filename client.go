@@ -48,6 +48,7 @@ func Start() error {
 		return xerrors.Errorf("udp client: %w", err)
 	}
 
+	log.Println("Search ikascrew Servers")
 	acs, err := cli.Find()
 	for _, elm := range acs {
 		log.Println(elm)
@@ -76,14 +77,16 @@ func Start() error {
 		log.Printf("Success powermate")
 	}()
 
-	go func() {
-		err = virtualController(ika.controller)
-		if err != nil {
-			log.Printf("virtual Controller Listen Error[" + err.Error() + "]")
-			return
-		}
-		log.Printf("Success Keyboard")
-	}()
+	/*
+		go func() {
+			err = virtualController(ika.controller)
+			if err != nil {
+				log.Printf("virtual Controller Listen Error[" + err.Error() + "]")
+				return
+			}
+			log.Printf("Success Keyboard")
+		}()
+	*/
 
 	//Main
 	win, err := NewWindow("ikascrew client", 1536, 768)
@@ -194,7 +197,6 @@ func virtualController(fn func(xbox.Event) error) error {
 
 func trigger(e pm.Event) error {
 
-	log.Println("trigger")
 	val := vols.Get()
 	if zero {
 		val = 0
@@ -209,9 +211,9 @@ func trigger(e pm.Event) error {
 	case pm.Rotation:
 		switch e.Value {
 		case pm.Left:
-			val -= 1.0
+			val -= 2.0
 		case pm.Right:
-			val += 1.0
+			val += 2.0
 		}
 
 		update = true
