@@ -9,13 +9,13 @@ import (
 
 //const ServerIP = "172.16.10.116"
 //const ServerIP = "192.168.12.1"
-const ServerIP = "192.168.11.11"
+//const ServerIP = "192.168.11.11"
 
 //const ServerIP = "10.0.0.1"
 
-//const ServerIP = "localhost"
+const ServerIP = "localhost"
 
-func (i *IkascrewClient) syncServer() (*pb.SyncReply, error) {
+func syncServer() (*pb.SyncReply, error) {
 
 	conn, err := grpc.Dial(ServerIP+":55555", grpc.WithInsecure())
 	if err != nil {
@@ -32,7 +32,7 @@ func (i *IkascrewClient) syncServer() (*pb.SyncReply, error) {
 	return r, nil
 }
 
-func (i *IkascrewClient) callEffect(id int64, t string) error {
+func callEffect(id int64, t string) error {
 
 	conn, err := grpc.Dial(ServerIP+":55555", grpc.WithInsecure())
 	if err != nil {
@@ -53,7 +53,7 @@ func (i *IkascrewClient) callEffect(id int64, t string) error {
 	return nil
 }
 
-func (i *IkascrewClient) callVolume(msg pb.VolumeMessage) error {
+func callVolume(msg pb.VolumeMessage) error {
 
 	conn, err := grpc.Dial(ServerIP+":55555", grpc.WithInsecure())
 	if err != nil {
@@ -69,15 +69,15 @@ func (i *IkascrewClient) callVolume(msg pb.VolumeMessage) error {
 	return nil
 }
 
-func (i *IkascrewClient) callNext() error {
-	return i.callSwitch("next")
+func callNext() error {
+	return callSwitch("next")
 }
 
-func (i *IkascrewClient) callPrev() error {
-	return i.callSwitch("prev")
+func callPrev() error {
+	return callSwitch("prev")
 }
 
-func (i *IkascrewClient) callSwitch(t string) error {
+func callSwitch(t string) error {
 
 	conn, err := grpc.Dial(ServerIP+":55555", grpc.WithInsecure())
 	if err != nil {

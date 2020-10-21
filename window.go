@@ -7,7 +7,6 @@ import (
 
 type Window struct {
 	window screen.Window
-	client *IkascrewClient
 
 	list   *List
 	next   *Next
@@ -54,10 +53,6 @@ func NewWindow(t string, w, h int) (window *Window, err error) {
 	})
 
 	return
-}
-
-func (w *Window) SetClient(c *IkascrewClient) {
-	w.client = c
 }
 
 func (w *Window) Release() {

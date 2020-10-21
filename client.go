@@ -2,15 +2,12 @@ package client
 
 import (
 	"log"
-	"os"
 
-	mc "github.com/ikascrew/core/multicast"
+	"github.com/ikascrew/client/config"
 	"github.com/ikascrew/pb"
 	pm "github.com/ikascrew/powermate"
 	vol "github.com/ikascrew/volumes"
-	"github.com/ikascrew/xbox"
 
-	tm "github.com/nsf/termbox-go"
 	"golang.org/x/xerrors"
 )
 
@@ -23,67 +20,61 @@ func init() {
 	vols.Add("Wait", 50)
 }
 
-type IkascrewClient struct {
-	selector *Window
-	testMode bool
-}
+var selector *Window
 
-var ika *IkascrewClient
+func Start(opts ...config.Option) error {
 
-func Start() error {
-
-	args := os.Args
-
-	ika = &IkascrewClient{}
-	if len(args) > 2 {
-		ika.testMode = true
-	} else {
-		ika.testMode = false
-	}
-
-	var err error
-
-	cli, err := mc.NewClient()
+	err := config.Set(opts...)
 	if err != nil {
-		return xerrors.Errorf("udp client: %w", err)
+		return xerrors.Errorf("option set error: %w", err)
 	}
 
-	acs, err := cli.Find()
-	for _, elm := range acs {
-		log.Println(elm)
-	}
+	/*
 
-	go func() {
-		//XBOX Controller
-		xbox.HandleFunc(ika.controller)
-		err = xbox.Listen(0)
+		cli, err := mc.NewClient()
 		if err != nil {
-			log.Printf("Controller Listen Error[" + err.Error() + "]")
-			return
+			return xerrors.Errorf("udp client: %w", err)
 		}
-		log.Printf("Success Controller")
-	}()
 
+			    // TODO: windows multicast support??
+				acs, err := cli.Find()
+				if err != nil {
+					return xerrors.Errorf("not found server: %w", err)
+				}
+
+				for _, elm := range acs {
+					log.Println(elm)
+				}
+	*/
+
+	log.Println("ServerVolume Start")
 	go vols.Start()
+
+	conf := config.Get()
+	if conf.ControllerType != config.ControllerTypeNone {
+
+		err := loopController(0)
+		if err != nil {
+			return xerrors.Errorf("virtual Controller Listen Error: %w", err)
+		}
+
+	} else {
+		//err = virtualController(ika.controller)
+		//if err != nil {
+		//}
+		//log.Printf("Success Virtual Controller")
+		return xerrors.Errorf("virtual Controller not supported.")
+	}
+
 	//powermate
-	go func() {
+	if conf.Powermate {
 		pm.HandleFunc(trigger)
 		err = pm.Listen("/dev/input/powermate")
 		if err != nil {
-			log.Printf("powermate Listen Error[" + err.Error() + "]")
-			return
+			return xerrors.Errorf("powermate Listen Error : %w", err)
 		}
 		log.Printf("Success powermate")
-	}()
-
-	go func() {
-		err = virtualController(ika.controller)
-		if err != nil {
-			log.Printf("virtual Controller Listen Error[" + err.Error() + "]")
-			return
-		}
-		log.Printf("Success Keyboard")
-	}()
+	}
 
 	//Main
 	win, err := NewWindow("ikascrew client", 1536, 768)
@@ -92,12 +83,11 @@ func Start() error {
 		return err
 	}
 
-	ika.selector = win
-	win.SetClient(ika)
+	selector = win
 
 	//クライアント描画
 	for {
-		e := win.window.NextEvent()
+		e := selector.window.NextEvent()
 		switch e := e.(type) {
 		case *Part:
 			e.Redraw()
@@ -107,6 +97,7 @@ func Start() error {
 	return err
 }
 
+/*
 func virtualController(fn func(xbox.Event) error) error {
 
 	//termboxの初期化
@@ -191,6 +182,7 @@ func virtualController(fn func(xbox.Event) error) error {
 
 	return nil
 }
+*/
 
 func trigger(e pm.Event) error {
 
@@ -238,7 +230,7 @@ func trigger(e pm.Event) error {
 			Value: val,
 		}
 
-		err := ika.callVolume(message)
+		err := callVolume(message)
 		if err != nil {
 			return err
 		}

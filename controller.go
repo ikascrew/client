@@ -3,76 +3,172 @@ package client
 import (
 	"fmt"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/ikascrew/xbox"
+	"golang.org/x/xerrors"
 )
 
-var Y bool  //Server push
-var X bool  //Cursor display
-var A bool  //next Add
-var B bool  //next Delete
-var L1 bool //Server switch
-var R1 bool //Server switch
+var (
+	JoyconButtons = []string{"A", "B", "X", "Y", "L", "R", "BACK", "START", "L_JOY", "R_JOY"}
+	JoyconAxes    = []string{"LEFT_JOY_H", "LEFT_JOY_V", "ZLR", "RIGHT_JOY_V", "RIGHT_JOY_H", "CROSS_H", "CROSS_V"}
+)
 
-func clearControllerEvent(ev *xbox.Event) {
-	ev.Axes[xbox.CROSS_HORIZONTAL] = 0
-	ev.Axes[xbox.CROSS_VERTICAL] = 0
-	ev.Buttons[xbox.L1] = false
-	ev.Buttons[xbox.R1] = false
-	ev.Buttons[xbox.A] = false
-	ev.Buttons[xbox.B] = false
-	ev.Buttons[xbox.X] = false
-	ev.Buttons[xbox.Y] = false
-	ev.Buttons[xbox.START] = false
-	ev.Buttons[xbox.BACK] = false
+func loopController(id int) error {
+
+	ctrl, err := xbox.New(id,
+		xbox.Logger(log.New(os.Stdout, "[CTRL]", log.LstdFlags|log.Lshortfile)),
+		xbox.Duration(40),
+		xbox.AxisMargin(3000),
+	)
+	if err != nil {
+		return xerrors.Errorf("controller error: %w", err)
+	}
+
+	if true {
+		err = ctrl.ButtonNames(JoyconButtons...)
+		if err != nil {
+			return xerrors.Errorf("Button error(10): %w", err)
+		}
+
+		err = ctrl.AxisNames(JoyconAxes...)
+		if err != nil {
+			return xerrors.Errorf("JoyStick(7): %w", err)
+		}
+	} else {
+		err = ctrl.ButtonNames("A", "B", "X", "Y", "L", "R", "BACK", "START")
+		if err != nil {
+			return xerrors.Errorf("Button error(8): %w", err)
+		}
+		err = ctrl.AxisNames("CROSS_H", "CROSS_V")
+		if err != nil {
+			return xerrors.Errorf("JoyStick(2): %w", err)
+		}
+	}
+
+	ch := ctrl.Event()
+
+	go func() {
+		for {
+			select {
+			case ev := <-ch:
+				if ev.Error() != nil {
+					fmt.Printf("%+v\n", ev.Error())
+					ctrl.Terminate()
+				} else {
+					controller(ev)
+				}
+			default:
+			}
+
+			if ctrl.Closed() {
+				break
+			}
+		}
+	}()
+
+	return nil
 }
 
-func (ika *IkascrewClient) controller(e xbox.Event) error {
+type Event struct {
+	Type  EventType
+	Value int
+}
 
-	log.Println("controller")
-	if xbox.JudgeAxis(e, xbox.CROSS_VERTICAL) {
-		ika.selector.list.setCursor(e.Axes[xbox.CROSS_VERTICAL] / 2)
-		ika.selector.list.Push()
+type EventType int
+
+const (
+	EventList EventType = iota
+	EventNext
+	EventUpper
+	EventLowwer
+	EventSelectList
+	EventDeleteNext
+	EventSelectNext
+	EventView
+	EventNone
+)
+
+func createEvent(e *xbox.Event) *Event {
+
+	ev := Event{}
+	t := EventNone
+	v := 0
+
+	for _, btn := range e.Buttons {
+		switch btn.Name {
+		case "A":
+			t = EventSelectList
+		case "B":
+			t = EventDeleteNext
+		case "X":
+			t = EventSelectNext
+		case "Y":
+			t = EventView
+		case "L":
+			t = EventUpper
+		case "R":
+			t = EventLowwer
+		}
 	}
 
-	if xbox.JudgeAxis(e, xbox.CROSS_HORIZONTAL) {
-		ika.selector.next.setCursor(e.Axes[xbox.CROSS_HORIZONTAL])
-		ika.selector.next.Push()
+	for _, axis := range e.Axes {
+		//"LEFT_JOY_H", "LEFT_JOY_V", "ZLR", "RIGHT_JOY_V", "RIGHT_JOY_H", "CROSS_H", "CROSS_V"
+		switch axis.Name {
+		case "LEFT_JOY_H":
+			t = EventNext
+			v = axis.Value
+		case "LEFT_JOY_V":
+			t = EventList
+			v = axis.Value
+		}
 	}
 
-	if e.Buttons[xbox.L1] && L1 {
-		ika.selector.list.maxCursor()
-		/*
-			L1 = false
-			err := ika.callPrev()
+	//TODO Superfamicon
+
+	ev.Type = t
+	ev.Value = v
+
+	return &ev
+}
+
+func controller(e *xbox.Event) error {
+
+	ev := createEvent(e)
+
+	switch ev.Type {
+	case EventList:
+		selector.list.setCursor(ev.Value / 2)
+		selector.list.Push()
+	case EventNext:
+		selector.next.setCursor(ev.Value)
+		selector.next.Push()
+	case EventUpper:
+		selector.list.zeroCursor()
+	case EventLowwer:
+		selector.list.maxCursor()
+	case EventSelectList:
+		res := selector.list.get()
+		if res != "" {
+			err := selector.next.add(res)
 			if err != nil {
-				log.Printf("callPrev[" + err.Error() + "]")
+				// TODO 無視
 			}
-		*/
-	} else if !e.Buttons[xbox.L1] {
-		L1 = true
-	}
-
-	if e.Buttons[xbox.R1] && R1 {
-		ika.selector.list.zeroCursor()
-		/*
-			R1 = false
-			err := ika.callNext()
-			if err != nil {
-				log.Printf("callNext[" + err.Error() + "]")
-			}
-		*/
-	} else if !e.Buttons[xbox.R1] {
-		R1 = true
-	}
-
-	//Controller
-
-	if e.Buttons[xbox.Y] && Y {
-		Y = false
-		res := ika.selector.next.get()
+			selector.next.Push()
+		} else {
+			log.Printf("Selector Error:" + "No Index")
+		}
+	case EventDeleteNext:
+		err := selector.next.delete()
+		if err != nil {
+			// TODO 無視
+			log.Printf("Pusher Delete Error:", err)
+		}
+		selector.next.Push()
+	case EventSelectNext:
+		res := selector.next.get()
 		if res != "" {
 
 			t := "file"
@@ -97,7 +193,7 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 				return fmt.Errorf("Efffect id error:[%s]", res)
 			}
 
-			err = ika.callEffect(int64(id), t)
+			err = callEffect(int64(id), t)
 			if err != nil {
 				log.Printf("callEffect[" + err.Error() + "]")
 			} else {
@@ -105,61 +201,23 @@ func (ika *IkascrewClient) controller(e xbox.Event) error {
 				//0
 				setZero()
 
-				ika.selector.next.delete()
-				ika.selector.next.Push()
+				selector.next.delete()
+				selector.next.Push()
 			}
 		} else {
 			log.Printf("Pusher Error: No Index")
 		}
-	} else if !e.Buttons[xbox.Y] {
-		Y = true
-	}
-
-	if e.Buttons[xbox.X] && X {
-		X = false
-		res := ika.selector.list.get()
+	case EventView:
+		res := selector.list.get()
 		if res != "" {
 
-			ika.selector.player.setFile(res)
-			ika.selector.player.Draw()
-			ika.selector.player.Push()
+			selector.player.setFile(res)
+			selector.player.Draw()
+			selector.player.Push()
 
 		} else {
 			log.Printf("Pusher Error: No Index")
 		}
-
-	} else if !e.Buttons[xbox.X] {
-		X = true
-	}
-
-	if e.Buttons[xbox.B] && B {
-		B = false
-
-		res := ika.selector.list.get()
-		if res != "" {
-			err := ika.selector.next.add(res)
-			if err != nil {
-				// TODO 無視
-			}
-			ika.selector.next.Push()
-		} else {
-			log.Printf("Selector Error:" + "No Index")
-		}
-
-	} else if !e.Buttons[xbox.B] {
-		B = true
-	}
-
-	if e.Buttons[xbox.A] && A {
-		A = false
-		err := ika.selector.next.delete()
-		if err != nil {
-			// TODO 無視
-			log.Printf("Pusher Delete Error:", err)
-		}
-		ika.selector.next.Push()
-	} else if !e.Buttons[xbox.A] {
-		A = true
 	}
 
 	return nil

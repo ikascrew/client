@@ -1,37 +1,30 @@
 module github.com/ikascrew/client
 
-go 1.14
+go 1.15
 
 require (
 	dmitri.shuralyov.com/gpu/mtl v0.0.0-20191203043605-d42048ed14fd // indirect
-	github.com/BurntSushi/xgb v0.0.0-20200324125942-20f126ea2843 // indirect
+	github.com/BurntSushi/xgb v0.0.0-20201008132610-5f9e7b3c49cd // indirect
 	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200707082815-5321531c36a2 // indirect
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/ikascrew/core v0.0.0-20200716052809-d71df6c3b3f2
-	github.com/ikascrew/go-opencv v0.0.0-20171108105817-beed5ac470ba // indirect
-	github.com/ikascrew/ikasbox v0.0.0-20200712003025-49f1509df2bf
-	github.com/ikascrew/ikascrew v0.0.0-20170821023227-0c3f5d5cfc00
+	github.com/golang/protobuf v1.4.3 // indirect
+	github.com/ikascrew/ikasbox v0.0.0-20200716061353-4f9dc2020e70
 	github.com/ikascrew/pb v0.0.0-20200229215417-95f0a80962e7
 	github.com/ikascrew/powermate v0.0.0-20170724041315-7b09f8e1cf88
 	github.com/ikascrew/volumes v0.0.0-20191110010825-799f11692e4c
-	github.com/ikascrew/xbox v0.0.0-20191228051708-da808c0d61a2
-	github.com/mattn/go-colorable v0.1.7 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/ikascrew/xbox v1.0.1-0.20201021050026-1238c28d9251
+	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
-	github.com/nsf/termbox-go v0.0.0-20190817171036-93860e161317
-	github.com/simulatedsimian/joystick v1.0.1 // indirect
+	github.com/nsf/termbox-go v0.0.0-20200418040025-38ba6e5628f1
 	gocv.io/x/gocv v0.23.0
-	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
-	golang.org/x/exp v0.0.0-20200513190911-00229845015e
-	golang.org/x/image v0.0.0-20200618115811-c13761719519 // indirect
-	golang.org/x/mobile v0.0.0-20200629153529-33b80540585f // indirect
-	golang.org/x/net v0.0.0-20200707034311-ab3426394381
-	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
-	golang.org/x/text v0.3.3 // indirect
-	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
-	google.golang.org/genproto v0.0.0-20200711021454-869866162049 // indirect
-	google.golang.org/grpc v1.30.0
+	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
+	golang.org/x/exp v0.0.0-20201008143054-e3b2a7f2fdc7
+	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5 // indirect
+	golang.org/x/mobile v0.0.0-20200801112145-973feb4309de // indirect
+	golang.org/x/net v0.0.0-20201021035429-f5854403a974
+	golang.org/x/sys v0.0.0-20201020230747-6e5568b54d1a // indirect
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154 // indirect
+	google.golang.org/grpc v1.33.1
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28
 )
