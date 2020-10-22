@@ -51,14 +51,21 @@ func Start(opts ...config.Option) error {
 	go vols.Start()
 
 	conf := config.Get()
+
 	if conf.ControllerType != config.ControllerTypeNone {
 
-		err := loopController(0)
+		ctrl, err := createController(0)
 		if err != nil {
-			return xerrors.Errorf("virtual Controller Listen Error: %w", err)
+			return xerrors.Errorf("createController Error: %w", err)
 		}
 
+		go func() {
+			err = ctrl.Listen()
+			log.Printf("Listen error: %+v\n", err)
+		}()
+
 	} else {
+		//TODO キーボードのみで設定を可能にする
 		//err = virtualController(ika.controller)
 		//if err != nil {
 		//}
@@ -79,8 +86,7 @@ func Start(opts ...config.Option) error {
 	//Main
 	win, err := NewWindow("ikascrew client", 1536, 768)
 	if err != nil {
-		log.Printf("NewWindow() Error[" + err.Error() + "]")
-		return err
+		return xerrors.Errorf("NewWindow error: %w", err)
 	}
 
 	selector = win
@@ -91,10 +97,11 @@ func Start(opts ...config.Option) error {
 		switch e := e.(type) {
 		case *Part:
 			e.Redraw()
+		default:
 		}
 	}
 
-	return err
+	return nil
 }
 
 /*

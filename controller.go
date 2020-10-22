@@ -16,7 +16,11 @@ var (
 	JoyconAxes    = []string{"LEFT_JOY_H", "LEFT_JOY_V", "ZLR", "RIGHT_JOY_V", "RIGHT_JOY_H", "CROSS_H", "CROSS_V"}
 )
 
-func loopController(id int) error {
+type Controller struct {
+	body *xbox.Controller
+}
+
+func createController(id int) (*Controller, error) {
 
 	ctrl, err := xbox.New(id,
 		xbox.Logger(log.New(os.Stdout, "[CTRL]", log.LstdFlags|log.Lshortfile)),
@@ -24,51 +28,54 @@ func loopController(id int) error {
 		xbox.AxisMargin(3000),
 	)
 	if err != nil {
-		return xerrors.Errorf("controller error: %w", err)
+		return nil, xerrors.Errorf("controller error: %w", err)
 	}
 
 	if true {
 		err = ctrl.ButtonNames(JoyconButtons...)
 		if err != nil {
-			return xerrors.Errorf("Button error(10): %w", err)
+			return nil, xerrors.Errorf("Button error(10): %w", err)
 		}
 
 		err = ctrl.AxisNames(JoyconAxes...)
 		if err != nil {
-			return xerrors.Errorf("JoyStick(7): %w", err)
+			return nil, xerrors.Errorf("JoyStick(7): %w", err)
 		}
 	} else {
 		err = ctrl.ButtonNames("A", "B", "X", "Y", "L", "R", "BACK", "START")
 		if err != nil {
-			return xerrors.Errorf("Button error(8): %w", err)
+			return nil, xerrors.Errorf("Button error(8): %w", err)
 		}
 		err = ctrl.AxisNames("CROSS_H", "CROSS_V")
 		if err != nil {
-			return xerrors.Errorf("JoyStick(2): %w", err)
+			return nil, xerrors.Errorf("JoyStick(2): %w", err)
 		}
 	}
 
-	ch := ctrl.Event()
+	rtn := Controller{
+		body: ctrl,
+	}
 
-	go func() {
-		for {
-			select {
-			case ev := <-ch:
-				if ev.Error() != nil {
-					fmt.Printf("%+v\n", ev.Error())
-					ctrl.Terminate()
-				} else {
-					controller(ev)
-				}
-			default:
-			}
+	return &rtn, nil
+}
 
-			if ctrl.Closed() {
-				break
+func (ctrl *Controller) Listen() error {
+	ch := ctrl.body.Event()
+	for {
+		select {
+		case ev := <-ch:
+			if ev.Error() != nil {
+				return xerrors.Errorf("controller error: %w", ev.Error())
+			} else {
+				raise(ev)
 			}
+		default:
 		}
-	}()
 
+		if ctrl.body.Closed() {
+			break
+		}
+	}
 	return nil
 }
 
@@ -134,7 +141,7 @@ func createEvent(e *xbox.Event) *Event {
 	return &ev
 }
 
-func controller(e *xbox.Event) error {
+func raise(e *xbox.Event) error {
 
 	ev := createEvent(e)
 
@@ -195,7 +202,7 @@ func controller(e *xbox.Event) error {
 
 			err = callEffect(int64(id), t)
 			if err != nil {
-				log.Printf("callEffect[" + err.Error() + "]")
+				log.Printf("callEffect[%+v]", err)
 			} else {
 
 				//0
