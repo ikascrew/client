@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"log"
 
 	"golang.org/x/exp/shiny/screen"
 
@@ -130,9 +129,7 @@ func (n *Next) add(f string) error {
 	}
 	n.resource = append(n.resource, f)
 
-	log.Println(f)
 	img, err := tool.LoadImage(f)
-
 	if err != nil {
 		return err
 	}

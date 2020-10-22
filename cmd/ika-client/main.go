@@ -8,15 +8,16 @@ import (
 	"github.com/ikascrew/client/config"
 )
 
+const VERSION = "0.0.0"
+
 func main() {
 
 	err := client.Start(
 		config.Controller(config.ControllerTypeJoyCon),
 		//config.UsePowermate(),
-		//config.Windows(),
 	)
 	if err != nil {
-		log.Printf("%+v", err)
+		log.Println(err)
 		os.Exit(1)
 	}
 

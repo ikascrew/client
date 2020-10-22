@@ -181,10 +181,6 @@ func raise(e *xbox.Event) error {
 			t := "file"
 			if strings.Index(res, "countdown") >= 0 {
 				t = "countdown"
-			} else if strings.Index(res, "jpg") >= 0 ||
-				strings.Index(res, "jpeg") >= 0 ||
-				strings.Index(res, "png") >= 0 {
-				t = "image"
 			}
 
 			idx := strings.LastIndex(res, "/")

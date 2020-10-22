@@ -32,6 +32,8 @@ func syncServer() (*pb.SyncReply, error) {
 	return r, nil
 }
 
+var first = true
+
 func callEffect(id int64, t string) error {
 
 	conn, err := grpc.Dial(ServerIP+":55555", grpc.WithInsecure())
@@ -40,6 +42,10 @@ func callEffect(id int64, t string) error {
 	}
 	defer conn.Close()
 	c := pb.NewIkascrewClient(conn)
+	if first {
+		syncServer()
+		first = false
+	}
 
 	_, err = c.Effect(context.Background(), &pb.EffectRequest{
 		Id:   id,
