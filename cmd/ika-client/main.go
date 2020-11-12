@@ -14,7 +14,7 @@ func main() {
 
 	err := client.Start(
 		config.Controller(config.ControllerTypeJoyCon),
-		//config.UsePowermate(),
+		config.UsePowermate(),
 	)
 	if err != nil {
 		log.Println(err)

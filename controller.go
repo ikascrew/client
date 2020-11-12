@@ -13,7 +13,7 @@ import (
 
 var (
 	JoyconButtons = []string{"A", "B", "X", "Y", "L", "R", "BACK", "START", "L_JOY", "R_JOY"}
-	JoyconAxes    = []string{"LEFT_JOY_H", "LEFT_JOY_V", "ZLR", "RIGHT_JOY_V", "RIGHT_JOY_H", "CROSS_H", "CROSS_V"}
+	JoyconAxes    = []string{"LEFT_JOY_H", "LEFT_JOY_V", "ZLR", "RIGHT_JOY_H", "RIGHT_JOY_V", "CROSS_H", "CROSS_V"}
 )
 
 type Controller struct {
@@ -95,6 +95,7 @@ const (
 	EventDeleteNext
 	EventSelectNext
 	EventView
+	EventSync
 	EventNone
 )
 
@@ -118,13 +119,15 @@ func createEvent(e *xbox.Event) *Event {
 			t = EventUpper
 		case "R":
 			t = EventLowwer
+		case "START":
+			t = EventSync
 		}
 	}
 
 	for _, axis := range e.Axes {
 		//"LEFT_JOY_H", "LEFT_JOY_V", "ZLR", "RIGHT_JOY_V", "RIGHT_JOY_H", "CROSS_H", "CROSS_V"
 		switch axis.Name {
-		case "LEFT_JOY_H":
+		case "RIGHT_JOY_H":
 			t = EventNext
 			v = axis.Value
 		case "LEFT_JOY_V":
@@ -146,11 +149,13 @@ func raise(e *xbox.Event) error {
 	ev := createEvent(e)
 
 	switch ev.Type {
+	case EventSync:
+		callSync()
 	case EventList:
 		selector.list.setCursor(ev.Value / 2)
 		selector.list.Push()
 	case EventNext:
-		selector.next.setCursor(ev.Value)
+		selector.next.setCursor(ev.Value / 2)
 		selector.next.Push()
 	case EventUpper:
 		selector.list.zeroCursor()
@@ -188,7 +193,6 @@ func raise(e *xbox.Event) error {
 			if idx != -1 {
 				buf = res[idx+1:]
 				buf = strings.Replace(buf, ".jpg", "", -1)
-				fmt.Println(buf)
 			}
 
 			id, err := strconv.Atoi(buf)
@@ -214,9 +218,14 @@ func raise(e *xbox.Event) error {
 		res := selector.list.get()
 		if res != "" {
 
-			selector.player.setFile(res)
-			selector.player.Draw()
-			selector.player.Push()
+			err := selector.player.setFile(res)
+			if err != nil {
+				log.Printf("%+v", err)
+			} else {
+
+				selector.player.Draw()
+				selector.player.Push()
+			}
 
 		} else {
 			log.Printf("Pusher Error: No Index")
