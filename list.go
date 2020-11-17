@@ -26,7 +26,7 @@ func NewList(w screen.Window, s screen.Screen) (*List, error) {
 
 	l := &List{}
 
-	r := image.Rect(0, 0, 512, 720)
+	r := image.Rect(0, 0, 320, 720)
 	l.Part = &Part{}
 	l.Init(w, s, r)
 
@@ -58,7 +58,7 @@ func (l *List) Draw() {
 
 	lox := 0
 	loy := 0
-	hix := 512
+	hix := 320
 	hiy := 720
 
 	ver := l.cursor / 200
@@ -66,27 +66,30 @@ func (l *List) Draw() {
 	white := color.RGBA{255, 255, 255, 255}
 	black := color.RGBA{0, 0, 0, 255}
 
-	start := (ver / 96)
+	h := 64
+	hf := h / 2
+	cur := h*2 + hf
+	start := (ver / h)
 
 	for y := loy; y < hiy; y++ {
 
 		var img image.Image
 
-		d := y / 96
+		d := y / h
 		idx := start + d
 
 		if idx >= 0 && idx < len(l.images) {
 			img = l.images[start+d]
 		}
 
-		dy := y - (d * 96)
+		dy := y - (d * h)
 
 		flag := false
 		yflag := false
 
-		if (y+48) > 240 && (y-48) < 240 {
+		if (y+hf) > cur && (y-hf) < cur {
 			l.idx = idx
-			if dy <= 5 || dy >= 91 {
+			if dy <= 5 || dy >= (h-5) {
 				flag = true
 			} else {
 				yflag = true
@@ -96,7 +99,7 @@ func (l *List) Draw() {
 		for x := lox; x < hix; x++ {
 
 			if yflag {
-				if x <= 5 || x >= 507 {
+				if x <= 5 || x >= (hix-5) {
 					flag = true
 				} else {
 					flag = false

@@ -76,11 +76,14 @@ func Start(opts ...config.Option) error {
 	//powermate
 	if conf.Powermate {
 		pm.HandleFunc(trigger)
-		err = pm.Listen("/dev/input/powermate")
-		if err != nil {
-			return xerrors.Errorf("powermate Listen Error : %w", err)
-		}
-		log.Printf("Success powermate")
+		go func() {
+			err = pm.Listen("/dev/input/powermate")
+			if err != nil {
+				log.Printf("powermate listen err: %+v", err)
+			} else {
+				log.Printf("Success powermate")
+			}
+		}()
 	}
 
 	/*

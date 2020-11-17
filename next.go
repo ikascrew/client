@@ -22,7 +22,7 @@ type Next struct {
 func NewNext(w screen.Window, s screen.Screen) (*Next, error) {
 
 	n := &Next{}
-	r := image.Rect(512, 0, 1536, 144)
+	r := image.Rect(320, 0, 1536, 180)
 
 	n.Part = &Part{}
 	n.Init(w, s, r)
@@ -39,28 +39,31 @@ func (n *Next) Draw() {
 
 	lox := 0
 	loy := 0
-	hix := 1024
-	hiy := 144
+	hix := 1280
+	hiy := 180
 
 	hor := n.cursor / 175
 
 	white := color.RGBA{255, 255, 255, 255}
 	black := color.RGBA{0, 0, 0, 255}
 
-	start := (hor / 256)
+	w := 320
+	h := hiy
+	start := (hor / w)
+
 	for y := loy; y < hiy; y++ {
 		var img image.Image
 		for x := lox; x < hix; x++ {
 
-			d := x / 256
+			d := x / w
 			idx := start + d
 
 			flag := false
-			if x >= 0 && x < 256 {
+			if x >= 0 && x < w {
 				n.idx = idx
 				flag = true
-				if x > 5 && x < 251 {
-					if y > 5 && y < 140 {
+				if x > 5 && x < (w-5) {
+					if y > 5 && y < (h-5) {
 						flag = false
 					}
 				}
@@ -72,7 +75,7 @@ func (n *Next) Draw() {
 				img = nil
 			}
 
-			dx := x - (d * 256)
+			dx := x - (d * w)
 			go func(img image.Image, x, y, dx int, flag bool) {
 				if img == nil {
 					m.Set(x, y, black)
