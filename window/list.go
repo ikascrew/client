@@ -1,6 +1,7 @@
-package client
+package window
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	_ "image/jpeg"
@@ -47,12 +48,16 @@ func NewList(w screen.Window, s screen.Screen) (*List, error) {
 		l.resource[idx] = id + ".jpg"
 	}
 
+	fmt.Println(len(paths))
+
 	max = len(paths) * 100 * 100
 
 	return l, nil
 }
 
 func (l *List) Draw() {
+
+	fmt.Println("List Draw")
 
 	m := l.Part.buffer.RGBA()
 
@@ -119,24 +124,24 @@ func (l *List) Draw() {
 	}
 }
 
-func (l *List) get() string {
+func (l *List) Get() string {
 	if l.idx < 0 || l.idx >= len(l.resource) {
 		return ""
 	}
 	return l.resource[l.idx]
 }
 
-func (l *List) setCursor(d int) {
+func (l *List) SetCursor(d int) {
 	l.cursor = l.cursor + d
 	l.Draw()
 }
 
-func (l *List) zeroCursor() {
+func (l *List) ZeroCursor() {
 	l.cursor = 0
 	l.Draw()
 }
 
-func (l *List) maxCursor() {
+func (l *List) MaxCursor() {
 	l.cursor = l.cursor + max
 	l.Draw()
 }

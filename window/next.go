@@ -1,4 +1,4 @@
-package client
+package window
 
 import (
 	"fmt"
@@ -89,7 +89,7 @@ func (n *Next) Draw() {
 	}
 }
 
-func (n *Next) get() string {
+func (n *Next) Get() string {
 	sz := len(n.resource)
 	if n.idx > sz-1 || sz == 0 || n.idx < 0 {
 		return ""
@@ -99,7 +99,7 @@ func (n *Next) get() string {
 	return rtn
 }
 
-func (n *Next) delete() error {
+func (n *Next) Delete() error {
 
 	sz := len(n.resource)
 	if n.idx > sz-1 || sz == 0 || n.idx < 0 {
@@ -123,7 +123,7 @@ func (n *Next) delete() error {
 	return nil
 }
 
-func (n *Next) add(f string) error {
+func (n *Next) Add(f string) error {
 
 	for _, elm := range n.resource {
 		if f == elm {
@@ -144,7 +144,7 @@ func (n *Next) add(f string) error {
 	return nil
 }
 
-func (n *Next) setCursor(d int) {
+func (n *Next) SetCursor(d int) {
 	n.cursor = n.cursor + d
 	n.Draw()
 }

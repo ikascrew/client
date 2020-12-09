@@ -1,4 +1,4 @@
-package client
+package window
 
 import (
 	"C"
@@ -25,7 +25,7 @@ func NewPlayer(w screen.Window, s screen.Screen) (*Player, error) {
 	return p, nil
 }
 
-func (p *Player) setFile(f string) error {
+func (p *Player) SetFile(f string) error {
 
 	img, err := tool.LoadImage(f)
 	if err != nil {

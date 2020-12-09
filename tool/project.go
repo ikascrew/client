@@ -31,7 +31,7 @@ const Ikasbox = "http://localhost:5555"
 const ListAPI = "/project/content/list/%d"
 
 //const Base = "http://10.0.0.1:5555/static/images/thumb/"
-const Base = Ikasbox + "/static/images/thumb/"
+const Base = Ikasbox + "/thumb/"
 
 func CreateProject(id string) error {
 
@@ -58,7 +58,7 @@ func CreateProject(id string) error {
 
 	for _, elm := range contents {
 
-		content_id := elm.ContentID
+		content_id := elm.ID
 		//3つのファイルにアクセスして保存
 		err = create(content_id)
 		if err != nil {
@@ -75,7 +75,7 @@ func CreateProject(id string) error {
 func create(id int) error {
 
 	imageDir := filepath.Join(GetClientDir(), IMAGE)
-	url := fmt.Sprintf(Base+"%d.jpg", id)
+	url := fmt.Sprintf(Base+"%d", id)
 
 	img, err := downloadImage(url)
 	if err != nil {
@@ -91,14 +91,14 @@ func create(id int) error {
 		return xerrors.Errorf("writeImage : %w", err)
 	}
 
-	url = fmt.Sprintf(Base+"/%d_4.jpg", id)
+	url = fmt.Sprintf(Base+"/%d/4", id)
 
 	img1, err := downloadImage(url)
 	if err != nil {
 		return xerrors.Errorf("downloadImage : %w", err)
 	}
 
-	url = fmt.Sprintf(Base+"/%d_12.jpg", id)
+	url = fmt.Sprintf(Base+"/%d/12", id)
 
 	img3, err := downloadImage(url)
 	if err != nil {

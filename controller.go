@@ -152,35 +152,35 @@ func raise(e *xbox.Event) error {
 	case EventSync:
 		callSync()
 	case EventList:
-		selector.list.setCursor(ev.Value / 2)
-		selector.list.Push()
+		selector.List.SetCursor(ev.Value / 2)
+		selector.List.Push()
 	case EventNext:
-		selector.next.setCursor(ev.Value / 2)
-		selector.next.Push()
+		selector.Next.SetCursor(ev.Value / 2)
+		selector.Next.Push()
 	case EventUpper:
-		selector.list.zeroCursor()
+		selector.List.ZeroCursor()
 	case EventLowwer:
-		selector.list.maxCursor()
+		selector.List.MaxCursor()
 	case EventSelectList:
-		res := selector.list.get()
+		res := selector.List.Get()
 		if res != "" {
-			err := selector.next.add(res)
+			err := selector.Next.Add(res)
 			if err != nil {
 				// TODO 無視
 			}
-			selector.next.Push()
+			selector.Next.Push()
 		} else {
 			log.Printf("Selector Error:" + "No Index")
 		}
 	case EventDeleteNext:
-		err := selector.next.delete()
+		err := selector.Next.Delete()
 		if err != nil {
 			// TODO 無視
 			log.Printf("Pusher Delete Error:", err)
 		}
-		selector.next.Push()
+		selector.Next.Push()
 	case EventSelectNext:
-		res := selector.next.get()
+		res := selector.Next.Get()
 		if res != "" {
 
 			t := "file"
@@ -208,23 +208,23 @@ func raise(e *xbox.Event) error {
 				//0
 				setZero()
 
-				selector.next.delete()
-				selector.next.Push()
+				selector.Next.Delete()
+				selector.Next.Push()
 			}
 		} else {
 			log.Printf("Pusher Error: No Index")
 		}
 	case EventView:
-		res := selector.list.get()
+		res := selector.List.Get()
 		if res != "" {
 
-			err := selector.player.setFile(res)
+			err := selector.Player.SetFile(res)
 			if err != nil {
 				log.Printf("%+v", err)
 			} else {
 
-				selector.player.Draw()
-				selector.player.Push()
+				selector.Player.Draw()
+				selector.Player.Push()
 			}
 
 		} else {
