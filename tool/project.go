@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/ikascrew/ikasbox/db"
 	"github.com/ikascrew/ikasbox/handler"
 
 	"github.com/nfnt/resize"
@@ -173,7 +174,7 @@ func downloadImage(url string) (image.Image, error) {
 	return img, nil
 }
 
-func getContentList(url string) ([]*handler.ProjectContent, error) {
+func getContentList(url string) ([]*db.Content, error) {
 
 	resp, err := http.Get(url)
 	if err != nil {
