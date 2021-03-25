@@ -3,15 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/ikascrew/client"
 	"github.com/ikascrew/client/tool"
 
+	"net/http"
+	_ "net/http/pprof"
+
 	"golang.org/x/xerrors"
 )
 
 func main() {
+
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 
 	err := run()
 	if err != nil {

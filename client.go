@@ -1,8 +1,8 @@
 package client
 
 import (
+	"fmt"
 	"log"
-	"time"
 
 	"github.com/ikascrew/client/config"
 	"github.com/ikascrew/client/window"
@@ -29,32 +29,29 @@ func Start(opts ...config.Option) error {
 	if err != nil {
 		return xerrors.Errorf("option set error: %w", err)
 	}
-
 	/*
-
 		cli, err := mc.NewClient()
 		if err != nil {
 			return xerrors.Errorf("udp client: %w", err)
 		}
 
-			    // TODO: windows multicast support??
-				acs, err := cli.Find()
-				if err != nil {
-					return xerrors.Errorf("not found server: %w", err)
-				}
+		// TODO: windows multicast support??
+		acs, err := cli.Find()
+		if err != nil {
+			return xerrors.Errorf("not found server: %w", err)
+		}
 
-				for _, elm := range acs {
-					log.Println(elm)
-				}
+		for _, elm := range acs {
+			log.Println(elm)
+		}
 	*/
-
-	log.Println("ServerVolume Start")
+	//fmt.Println("ServerVolume Start")
 	go vols.Start()
 
 	conf := config.Get()
-
 	if conf.ControllerType != config.ControllerTypeNone {
 
+		fmt.Println("Create Controller")
 		ctrl, err := createController(0)
 		if err != nil {
 			return xerrors.Errorf("createController Error: %w", err)
@@ -62,22 +59,21 @@ func Start(opts ...config.Option) error {
 
 		go func() {
 			err = ctrl.Listen()
-			log.Printf("Listen error: %+v\n", err)
+			fmt.Printf("Listen error: %+v\n", err)
 		}()
 
 	} else {
-
 		go func() {
 			err = virtualController()
 			if err != nil {
 				log.Println(xerrors.Errorf("virtual Controller error: %w", err))
 			}
 		}()
-		log.Printf("Success Virtual Controller")
+		fmt.Println("Success Virtual Controller")
 	}
-
 	//powermate
 	if conf.Powermate {
+		fmt.Println("Use Powermate")
 		pm.HandleFunc(trigger)
 		go func() {
 			err = pm.Listen("/dev/input/powermate")
@@ -90,22 +86,11 @@ func Start(opts ...config.Option) error {
 	}
 
 	//Main
-	win, err := window.New("ikascrew client", 1536, 768)
+	win := window.New("ikascrew client", 1536, 768)
 	if err != nil {
 		return xerrors.Errorf("NewWindow error: %w", err)
 	}
-
 	selector = win
 
-	//クライアント描画
-	for range time.Tick(10 * time.Millisecond) {
-		e := selector.Owner.NextEvent()
-		switch e := e.(type) {
-		case *window.Part:
-			e.Redraw()
-		default:
-		}
-	}
-
-	return nil
+	return win.Start()
 }

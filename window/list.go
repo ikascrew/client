@@ -1,7 +1,6 @@
 package window
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	_ "image/jpeg"
@@ -48,16 +47,12 @@ func NewList(w screen.Window, s screen.Screen) (*List, error) {
 		l.resource[idx] = id + ".jpg"
 	}
 
-	fmt.Println(len(paths))
-
 	max = len(paths) * 100 * 100
 
 	return l, nil
 }
 
 func (l *List) Draw() {
-
-	fmt.Println("List Draw")
 
 	m := l.Part.buffer.RGBA()
 

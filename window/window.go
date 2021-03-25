@@ -11,53 +11,69 @@ type Window struct {
 	List   *List
 	Next   *Next
 	Player *Player
+
+	Title  string
+	Width  int
+	Height int
 }
 
-func New(t string, w, h int) (window *Window, err error) {
+func New(t string, width, height int) *Window {
+	var w Window
+	w.Owner = nil
+	w.Title = t
+	w.Width = width
+	w.Height = height
+	return &w
+}
 
-	window = &Window{
-		Owner: nil,
-	}
+func (w *Window) Start() error {
+
+	var err error
 
 	driver.Main(func(s screen.Screen) {
 		opt := &screen.NewWindowOptions{
-			Title:  t,
-			Width:  w,
-			Height: h,
+			Title:  w.Title,
+			Width:  w.Width,
+			Height: w.Height,
 		}
 
-		window.Owner, err = s.NewWindow(opt)
+		w.Owner, err = s.NewWindow(opt)
 		if err != nil {
 			return
 		}
+		defer w.Owner.Release()
 
-		l, err := NewList(window.Owner, s)
+		l, err := NewList(w.Owner, s)
 		if err != nil {
 			return
 		}
+		defer l.Release()
+		w.List = l
 
-		n, err := NewNext(window.Owner, s)
+		n, err := NewNext(w.Owner, s)
 		if err != nil {
 			return
 		}
+		defer n.Release()
+		w.Next = n
 
-		p, err := NewPlayer(window.Owner, s)
+		p, err := NewPlayer(w.Owner, s)
 		if err != nil {
 			return
 		}
+		defer p.Release()
+		w.Player = p
 
-		window.List = l
-		window.Next = n
-		window.Player = p
-
+		//クライアント描画
+		for {
+			e := w.Owner.NextEvent()
+			switch e := e.(type) {
+			case *Part:
+				e.Redraw()
+			default:
+			}
+		}
 	})
 
-	return
-}
-
-func (w *Window) Release() {
-	w.Owner.Release()
-	w.List.Release()
-	w.Next.Release()
-	w.Player.Release()
+	return nil
 }

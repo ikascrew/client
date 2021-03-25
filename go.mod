@@ -3,9 +3,8 @@ module github.com/ikascrew/client
 go 1.15
 
 require (
-	dmitri.shuralyov.com/gpu/mtl v0.0.0-20191203043605-d42048ed14fd // indirect
-	github.com/BurntSushi/xgb v0.0.0-20201008132610-5f9e7b3c49cd // indirect
-	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20201108214237-06ea97f0c265 // indirect
+	github.com/BurntSushi/xgb v0.0.0-20210121224620-deaf085860bc // indirect
+	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20210311203641-62640a716d48 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/ikascrew/ikasbox v0.0.0-20210324045825-32890de1e746
 	github.com/ikascrew/pb v0.0.0-20200229215417-95f0a80962e7
@@ -16,10 +15,11 @@ require (
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/nsf/termbox-go v0.0.0-20200418040025-38ba6e5628f1
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897 // indirect
-	golang.org/x/exp v0.0.0-20201203231725-fa01524bc59d
-	golang.org/x/image v0.0.0-20201208152932-35266b937fa6 // indirect
-	golang.org/x/mobile v0.0.0-20201208152944-da85bec010a2 // indirect
+	golang.org/x/exp v0.0.0-20210220032938-85be41e4509f
+	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
+	golang.org/x/mobile v0.0.0-20210220033013-bdb1ca9a1e08 // indirect
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974
+	golang.org/x/sys v0.0.0-20210324051608-47abb6519492 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
 	google.golang.org/genproto v0.0.0-20201019141844-1ed22bb0c154 // indirect
 	google.golang.org/grpc v1.33.1
