@@ -34,6 +34,9 @@ func virtualController() error {
 				btn := xbox.NewButton(0, "X")
 				tmEv.Buttons = append(tmEv.Buttons, btn)
 			case tm.KeyArrowDown:
+				pmEv = new(pm.Event)
+				pmEv.Type = pm.Press
+				pmEv.Value = pm.Down
 			case tm.KeyArrowUp:
 			case tm.KeyArrowRight:
 				pmEv = new(pm.Event)
