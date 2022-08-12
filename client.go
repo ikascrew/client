@@ -45,7 +45,7 @@ func Start(opts ...config.Option) error {
 			log.Println(elm)
 		}
 	*/
-	//fmt.Println("ServerVolume Start")
+	fmt.Println("ServerVolume Start")
 	go vols.Start()
 
 	conf := config.Get()
@@ -92,5 +92,8 @@ func Start(opts ...config.Option) error {
 	}
 	selector = win
 
-	return win.Start()
+	win.Start()
+
+	wait := make(chan error)
+	return <-wait
 }

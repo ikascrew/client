@@ -2,7 +2,6 @@ package tool
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sort"
 	"strings"
@@ -14,7 +13,7 @@ import (
 
 func Search(d string, target string, ignore []string) ([]string, error) {
 
-	fileInfos, err := ioutil.ReadDir(d)
+	fileInfos, err := os.ReadDir(d)
 	if err != nil {
 		return nil, fmt.Errorf("Error:Read Dir[%s]", d)
 	}
@@ -60,12 +59,12 @@ func Search(d string, target string, ignore []string) ([]string, error) {
 }
 
 func CopyFile(src, dst string) error {
-	b, err := ioutil.ReadFile(src)
+	b, err := os.ReadFile(src)
 	if err != nil {
 		return fmt.Errorf("Error:Read File %s", src)
 	}
 
-	err = ioutil.WriteFile(dst, b, 0644)
+	err = os.WriteFile(dst, b, 0644)
 	if err != nil {
 		return fmt.Errorf("Error:Write File %s", dst)
 	}

@@ -4,6 +4,8 @@ import (
 	"image"
 	"image/color"
 	_ "image/jpeg"
+	"os"
+	"sort"
 
 	"strings"
 
@@ -37,12 +39,35 @@ func NewList(w screen.Window, s screen.Screen) (*List, error) {
 		return nil, err
 	}
 
+	sort.Slice(paths, func(i, j int) bool {
+
+		info1, err := os.Stat(paths[i])
+		if err != nil {
+			return true
+		}
+		info2, err := os.Stat(paths[j])
+		if err != nil {
+			return false
+		}
+
+		t1 := info1.ModTime()
+		t2 := info2.ModTime()
+
+		return t1.Before(t2)
+
+		//name1 := filepath.Base(paths[i])
+		//name2 := filepath.Base(paths[j])
+		//id1, _ := strconv.Atoi(strings.Replace(name1, "_thumb.jpg", "", -1))
+		//id2, _ := strconv.Atoi(strings.Replace(name2, "_thumb.jpg", "", -1))
+
+		//return id1 < id2
+	})
+
 	l.images = make([]image.Image, len(paths)+1)
 	l.resource = make([]string, len(paths)+1)
 
 	for idx, path := range paths {
 		l.images[idx], _ = tool.LoadImage(path)
-
 		id := strings.Replace(path, "_thumb.jpg", "", -1)
 		l.resource[idx] = id + ".jpg"
 	}

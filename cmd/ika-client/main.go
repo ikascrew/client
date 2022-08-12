@@ -3,23 +3,26 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/ikascrew/client"
+	"github.com/ikascrew/client/config"
 	"github.com/ikascrew/client/tool"
-
-	"net/http"
-	_ "net/http/pprof"
 
 	"golang.org/x/xerrors"
 )
 
+var joycon bool
+var powermate bool
+
+func init() {
+	flag.BoolVar(&joycon, "joy", false, "Use JoyCon")
+	flag.BoolVar(&powermate, "pm", false, "Use Powermate")
+}
+
 func main() {
 
-	go func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
-	}()
+	flag.Parse()
 
 	err := run()
 	if err != nil {
@@ -44,11 +47,15 @@ func run() error {
 
 	switch command {
 	case "start":
-		err = client.Start(
-		//config.Controller(config.ControllerTypeJoyCon),
-		//config.UsePowermate(),
-		)
 
+		opts := make([]config.Option, 0)
+		if joycon {
+			opts = append(opts, config.Controller(config.ControllerTypeJoyCon))
+		}
+		if powermate {
+			opts = append(opts, config.UsePowermate())
+		}
+		err = client.Start(opts...)
 	case "create":
 		id := args[1]
 		err = tool.CreateProject(id)

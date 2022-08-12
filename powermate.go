@@ -21,11 +21,10 @@ func trigger(e pm.Event) error {
 	case pm.Rotation:
 		switch e.Value {
 		case pm.Left:
-			val -= 2.0
+			val -= 1.0
 		case pm.Right:
-			val += 2.0
+			val += 1.0
 		}
-
 		update = true
 	case pm.Press:
 		switch e.Value {

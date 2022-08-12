@@ -60,6 +60,7 @@ func CreateProject(id string) error {
 	for _, elm := range contents {
 
 		content_id := elm.ID
+
 		//3つのファイルにアクセスして保存
 		err = create(content_id)
 		if err != nil {

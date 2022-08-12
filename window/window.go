@@ -1,6 +1,9 @@
 package window
 
 import (
+	"fmt"
+	"log"
+
 	"golang.org/x/exp/shiny/driver"
 	"golang.org/x/exp/shiny/screen"
 )
@@ -31,6 +34,7 @@ func (w *Window) Start() error {
 	var err error
 
 	driver.Main(func(s screen.Screen) {
+
 		opt := &screen.NewWindowOptions{
 			Title:  w.Title,
 			Width:  w.Width,
@@ -39,12 +43,14 @@ func (w *Window) Start() error {
 
 		w.Owner, err = s.NewWindow(opt)
 		if err != nil {
+			log.Printf("NewList() error: %+v\n", err)
 			return
 		}
 		defer w.Owner.Release()
 
 		l, err := NewList(w.Owner, s)
 		if err != nil {
+			log.Printf("NewList() error: %+v\n", err)
 			return
 		}
 		defer l.Release()
@@ -52,6 +58,7 @@ func (w *Window) Start() error {
 
 		n, err := NewNext(w.Owner, s)
 		if err != nil {
+			log.Printf("NewNext() error: %+v\n", err)
 			return
 		}
 		defer n.Release()
@@ -59,6 +66,7 @@ func (w *Window) Start() error {
 
 		p, err := NewPlayer(w.Owner, s)
 		if err != nil {
+			log.Printf("NewPlayer() error: %+v\n", err)
 			return
 		}
 		defer p.Release()
@@ -74,6 +82,8 @@ func (w *Window) Start() error {
 			}
 		}
 	})
+
+	fmt.Println("Window Return")
 
 	return nil
 }
