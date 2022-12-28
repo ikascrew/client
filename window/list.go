@@ -14,6 +14,7 @@ import (
 	"github.com/ikascrew/client/tool"
 )
 
+var plus = 0
 var max = 0
 
 type List struct {
@@ -72,7 +73,8 @@ func NewList(w screen.Window, s screen.Screen) (*List, error) {
 		l.resource[idx] = id + ".jpg"
 	}
 
-	max = len(paths) * 100 * 100
+	plus = 12400 * 10
+	max = 12400 * len(paths)
 
 	return l, nil
 }
@@ -161,7 +163,12 @@ func (l *List) ZeroCursor() {
 	l.Draw()
 }
 
+func (l *List) PlusCursor() {
+	l.cursor = l.cursor + plus
+	l.Draw()
+}
+
 func (l *List) MaxCursor() {
-	l.cursor = l.cursor + max
+	l.cursor = max
 	l.Draw()
 }

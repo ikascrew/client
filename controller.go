@@ -96,6 +96,7 @@ const (
 	EventSelectNext
 	EventView
 	EventSync
+	EventLast
 	EventNone
 )
 
@@ -121,6 +122,8 @@ func createEvent(e *xbox.Event) *Event {
 			t = EventLowwer
 		case "START":
 			t = EventSync
+		case "BACK":
+			t = EventLast
 		}
 	}
 
@@ -160,6 +163,8 @@ func raise(e *xbox.Event) error {
 	case EventUpper:
 		selector.List.ZeroCursor()
 	case EventLowwer:
+		selector.List.PlusCursor()
+	case EventLast:
 		selector.List.MaxCursor()
 	case EventSelectList:
 		res := selector.List.Get()
